@@ -1,0 +1,18 @@
+{
+  "name": "gmail-sheets-support-ticket-workflow",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Minimal Node.js scaffold for a Gmail-to-Google-Sheets support ticket workflow.",
+  "type": "module",
+  "engines": {
+    "node": ">=18"
+  },
+  "scripts": {
+    "check": "node --check tools/index.js && node --check tools/gmail.js && node --check tools/parser.js && node --check tools/sheets.js",
+    "preview": "node tools/index.js",
+    "test:gmail": "node tools/gmail.js --test-connection",
+    "test:sheets": "node tools/sheets.js --test-connection",
+    "test": "npm run check",
+    "start": "node tools/index.js"
+  }
+}

@@ -1,0 +1,16 @@
+Subject: Internet keeps dropping every few minutes
+From: Jordan Lee <jordan.lee88@gmail.com>
+To: support@aussiebroadband.com.au
+
+Hi,
+
+My internet has been very unstable for the past three days. It drops out every 10 to 15 minutes, and when it reconnects the speed is much slower than usual.
+
+The problem happens on both Wi-Fi and Ethernet. I have restarted the modem twice and checked the cables, but it is still happening.
+
+I am on an nbn plan at 17 Banksia Avenue, Geelong VIC 3220. I am not sure what modem model I have.
+
+Please let me know what else I should check.
+
+Regards,
+Jordan
