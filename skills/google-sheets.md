@@ -2,15 +2,25 @@
 
 Use this skill to validate, deduplicate, write, format, and verify support tickets in the `Tickets` sheet.
 
-## Purpose
+## Scope
 
-This skill handles Google Sheets only. It must not interpret customer language or change AI decisions.
+This skill handles Google Sheets only.
 
-Its responsibilities are to validate the sheet, check duplicates, map ticket data, write rows safely, apply formatting and dropdowns, and verify the result.
+It must not interpret customer language or change AI decisions.
+
+It may:
+
+- validate the sheet structure;
+- validate controlled values;
+- check duplicates;
+- map ticket data;
+- append or update rows safely;
+- apply formatting and dropdowns;
+- verify the final result.
 
 ## Columns
 
-Use exactly these 13 visible columns, in this order:
+Use exactly these 13 visible columns in this order:
 
 1. Received Date
 2. Customer Name
@@ -26,7 +36,7 @@ Use exactly these 13 visible columns, in this order:
 12. Suggested Reply
 13. Status
 
-Do not add visible Gmail Message ID, Thread ID, internal ticket key, notes, or processing columns.
+Do not add visible Gmail Message ID, Thread ID, notes, internal keys, or processing columns.
 
 ## Allowed Values
 
@@ -85,17 +95,17 @@ Do not add visible Gmail Message ID, Thread ID, internal ticket key, notes, or p
 
 ## Workflow
 
-1. Confirm the `Tickets` sheet exists.
-2. Read and validate the exact 13-column header.
-3. Validate all required ticket fields and controlled values.
-4. Check whether the exact Gmail message has already been written.
+1. Confirm the `Tickets` tab exists.
+2. Validate the exact 13-column header.
+3. Validate required fields and controlled values.
+4. Check whether the Gmail message already exists.
 5. Treat a new message in an existing thread as a follow-up, not an automatic duplicate.
 6. Append or update the ticket safely.
-7. Apply all required formatting and dropdown validation.
-8. Re-read the sheet and verify the result.
+7. Apply formatting and dropdown validation.
+8. Re-read and verify the sheet.
 9. Return `written`, `duplicate`, `updated`, or `failed`.
 
-The workflow is not complete until both the data write and formatting verification have passed.
+The workflow is complete only after both data and formatting verification pass.
 
 ## Duplicate Checking
 
@@ -110,11 +120,11 @@ If Gmail identifiers are unavailable, compare:
 - Received Date
 - Issue Summary
 
-Normalise whitespace and casing before comparison.
+Normalise casing and whitespace before comparison.
 
 Do not use only the sender or subject as a duplicate rule.
 
-## Sheet Ranges
+## Ranges
 
 - Header: `A1:M1`
 - Data: `A2:M`
@@ -124,32 +134,31 @@ Do not use only the sender or subject as a duplicate rule.
 - Sentiment: `H2:H`
 - Status: `M2:M`
 
-Apply formatting to populated rows where possible.
+Apply formatting only to populated rows where possible.
 
-## Required Formatting
+## Formatting
 
 ### Header
 
 Apply to `A1:M1`:
 
 - bold text;
-- clean light background;
+- light background;
 - wrapped text;
-- centred vertically;
+- centred vertical alignment;
 - readable row height;
 - filter enabled;
 - row 1 frozen.
 
 ### Data Rows
 
-Apply to populated rows in `A2:M`:
+Apply to populated cells in `A2:M`:
 
 - regular font weight;
-- clean white background;
+- white background;
 - top alignment;
 - wrapped text;
 - readable row height;
-- light borders;
 - no full-row colour;
 - no inherited header fill;
 - no bold data rows.
@@ -158,9 +167,9 @@ Do not change ticket values while formatting.
 
 ### Column Widths
 
-Keep short fields compact and make long-text columns wider.
+Keep short fields compact.
 
-Long-text columns include:
+Make these columns wider:
 
 - Issue Summary
 - Suggested Next Action
@@ -168,65 +177,43 @@ Long-text columns include:
 
 Text must wrap instead of being cut off.
 
-### Date Formatting
+### Date Format
 
 Use one consistent date and time format.
 
-Do not replace the original Gmail timestamp with the current time.
+Preserve the original Gmail timestamp.
 
+Do not replace it with the current time.
 
-## Background Colour Rules
+## Background Colours
 
-Use a clean white background for all populated data cells in `A2:M`.
+Use white for all populated data cells in `A2:M`.
 
-Only the header row `A1:M1` may use a light background colour.
-
-Do not apply a full-row background colour to ticket rows.
+Only `A1:M1` may use a header background.
 
 Conditional colours may appear only in:
 
-- Priority column `G`
-- Sentiment column `H`
-- Status column `M`
+- Priority `G`
+- Sentiment `H`
+- Status `M`
 
-All other populated data cells must remain white.
-
-After formatting, verify that:
-
-- no populated data row has a full-row fill colour;
-- all non-controlled data cells use a white background;
-- only `G`, `H`, and `M` contain conditional colours;
-- formatting did not change any ticket value.
-
+Do not colour entire ticket rows.
 
 ## Table Borders
 
-Apply thin, light borders to every populated cell in the ticket table.
-
-Use borders across the populated range from `A1:M[last populated row]`.
+Apply thin, light-grey borders to `A1:M[last populated row]`.
 
 Requirements:
 
-- use thin, light-grey borders;
-- include both horizontal and vertical borders;
-- keep borders consistent across the header and data rows;
+- include horizontal and vertical borders;
+- keep borders consistent;
 - do not use thick, dark, double, or decorative borders;
-- do not apply borders to large empty areas outside the populated table;
-- preserve all ticket values and existing dropdowns.
+- do not format large empty areas;
+- preserve all values and dropdowns.
 
-The goal is to make each row and column easy to scan while keeping the sheet clean.
+## Dropdown Validation
 
-After formatting, verify that:
-
-- every populated cell has a visible border;
-- both row and column boundaries are visible;
-- no populated data cell is missing a border;
-- no heavy or decorative border was added;
-- no ticket value changed.
-
-## Required Dropdown Validation
-
-Add dropdowns using the exact allowed values.
+Add dropdowns using the exact allowed values:
 
 - `E2:E` Product / Service
 - `F2:F` Issue Category
@@ -240,7 +227,7 @@ Do not silently replace invalid values.
 
 ## Conditional Formatting
 
-Apply colour only to the controlled cell, not the entire row.
+Apply colour only to the controlled cell.
 
 ### Priority
 
@@ -264,32 +251,60 @@ Apply colour only to the controlled cell, not the entire row.
 - In Progress = light blue
 - New = light grey
 - Resolved = light green
-```
+
+## Verification
+
+After writing and formatting, re-read the sheet and confirm:
+
+- the `Tickets` tab exists;
+- all 13 headers are unchanged and in the correct order;
+- every written row contains 13 values;
+- data rows are regular, not bold;
+- the header is bold;
+- row 1 is frozen;
+- filters are enabled;
+- every populated cell has thin borders;
+- horizontal and vertical lines are visible;
+- dropdowns exist in `E`, `F`, `G`, `H`, and `M`;
+- non-controlled data cells are white;
+- no full-row colour remains;
+- conditional colours appear only in `G`, `H`, and `M`;
+- no ticket value changed;
+- no production test row remains.
+
+Return a short summary:
+
+- Write result: written
+- Rows added: 8
+- Header validation: passed
+- Borders: passed
+- Dropdowns: passed
+- Conditional formatting: passed
+- Frozen row: passed
+- Filters: passed
+- Content preserved: passed
 
 ## Tool Limitations
 
-If the available Google Sheets tool cannot apply a required feature, do not silently skip it.
+If a Google Sheets action is unsupported:
 
-Report the limitation clearly.
-
-When formatting actions are unsupported:
-
-- still write the ticket data safely;
+- do not silently skip it;
+- write the ticket data safely;
 - preserve all existing rows;
-- report exactly which formatting actions were not completed;
-- recommend applying the missing formatting manually once in Google Sheets;
-- do not claim the sheet is fully formatted.
+- report the unsupported feature;
+- do not claim the sheet is fully formatted;
+- recommend applying the missing formatting manually.
 
 ## Rules
 
 - Do not interpret customer language.
-- Do not change Product / Service, Issue Category, Priority, Sentiment, Summary, Next Action, Suggested Reply, or Status.
+- Do not change AI-generated ticket decisions.
 - Do not invent or rewrite ticket content.
 - Do not add, remove, rename, or reorder visible columns.
-- Reject rows with missing required data or invalid controlled values.
-- Do not overwrite existing rows during setup or formatting.
+- Reject missing fields or invalid controlled values.
+- Do not overwrite existing rows during formatting.
 - Preserve all existing ticket content.
-- Integration tests must not remain in the production `Tickets` sheet.
-- Gmail Message ID and Thread ID must remain internal.
+- Keep Gmail Message ID and Thread ID internal.
+- Remove integration test rows from production.
 - Formatting must never change ticket meaning.
-- A successful data write without formatting verification is only a partial success.
+- A successful write without verification is only a partial success.
