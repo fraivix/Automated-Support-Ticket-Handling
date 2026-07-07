@@ -176,38 +176,6 @@ The `Tickets` tab must contain exactly these 13 visible columns:
 12. Suggested Reply
 13. Status
 
-The sheet should use:
-
-* a bold header row;
-* regular white data rows;
-* wrapped text;
-* top alignment;
-* thin light-grey borders;
-* filters;
-* a frozen header row;
-* dropdowns in Product / Service, Issue Category, Priority, Sentiment, and Status;
-* conditional colours only in Priority, Sentiment, and Status.
-
-## Duplicate handling
-
-The primary duplicate key is:
-
-```text
-Gmail Message ID
-```
-
-Thread ID is used only to connect related follow-up messages.
-
-A new message in an existing thread is not automatically a duplicate.
-
-When Gmail identifiers are unavailable, the fallback check uses:
-
-* Customer Email;
-* Email Subject;
-* Received Date;
-* Issue Summary.
-
-Internal Gmail identifiers must not appear in the visible `Tickets` columns.
 
 ## Safety
 
